@@ -38,7 +38,7 @@ export interface ICategory {
 	id: string;
 }
 
-export interface IEntry {
+export interface IMovie {
 	title: string;
 	description: string;
 	type: string;
@@ -55,5 +55,5 @@ export interface IEntry {
 
 export interface IMovieData {
 	totalCount: number;
-	entries: IEntry[];
+	entries: IMovie[];
 }

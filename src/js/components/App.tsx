@@ -3,6 +3,7 @@ import * as React from "react";
 import { hot } from "react-hot-loader";
 import { css, jsx } from "@emotion/core";
 import { IMovieData } from "../types/MovieData";
+import Carousel from "./Carousel";
 
 interface IProps {}
 interface IState {
@@ -31,7 +32,7 @@ class App extends React.Component<IProps, IState> {
 		return (
 			<div className="app" css={Styles}>
 				<h1>Video On-Demand</h1>
-				{this.state.data ? <p>Got data</p> : <p>Loading</p>}
+				{this.state.data ? <Carousel movies={this.state.data.entries} /> : <p>Loading</p>}
 			</div>
 		);
 	}
