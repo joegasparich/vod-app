@@ -1,0 +1,27 @@
+{
+	"Component": {
+		"prefix": "cpt",
+		"body": [
+			"/** @jsx jsx */",
+			"import { css, jsx } from \"@emotion/core\";",
+			"import * as React from \"react\";",
+			"",
+			"interface IProps {}",
+			"interface IState {}",
+			"",
+			"const Styles = css``;",
+			"",
+			"class $TM_FILENAME_BASE extends React.Component<IProps, IState> {",
+			"\tpublic readonly state: IState = {};",
+			"",
+			"\tpublic render(): JSX.Element {",
+			"\t\treturn <div id=\"id\" css={Styles} />;",
+			"\t}",
+			"}",
+			"",
+			"export default $TM_FILENAME_BASE;",
+			""
+		],
+		"description": "Component"
+	}
+}
