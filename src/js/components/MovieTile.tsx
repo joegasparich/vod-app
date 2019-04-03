@@ -31,8 +31,8 @@ class MovieTile extends React.Component<IProps, IState> {
 	private ref: React.RefObject<HTMLDivElement> = React.createRef();
 
 	// Lifecycle Methods
-	public componentDidUpdate() {
-		if (this.props.focused && this.ref.current) {
+	public componentDidUpdate(prevProps: IProps) {
+		if (this.props.focused && this.ref.current && !prevProps.focused) {
 			this.ref.current.focus();
 		}
 	}
