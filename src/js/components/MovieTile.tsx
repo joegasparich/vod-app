@@ -7,6 +7,7 @@ interface IProps {
 	movie: IMovie;
 	focused: boolean;
 	handleSelect: (event: React.SyntheticEvent<HTMLDivElement, Event>) => void;
+	handleOpenMovie: (movie: IMovie) => void;
 }
 interface IState {}
 
@@ -14,6 +15,12 @@ const Styles = css`
 	margin: 1rem;
 	min-width: 214px;
 	overflow: hidden;
+	cursor: pointer;
+
+	transition: 0.2s transform ease;
+	&:hover {
+		transform: scale(1.05);
+	}
 
 	.title {
 		text-align: center;
@@ -22,7 +29,7 @@ const Styles = css`
 	}
 
 	&:focus {
-		border: 2px solid #5599ff;
+		outline: 2px solid #5599ff;
 	}
 `;
 
@@ -48,6 +55,7 @@ class MovieTile extends React.Component<IProps, IState> {
 				tabIndex={-1}
 				ref={this.ref}
 				onFocus={this.props.handleSelect}
+				onClick={() => this.props.handleOpenMovie(this.props.movie)}
 			>
 				{image && <img src={image.url} alt={this.props.movie.title} />}
 				<p className="title">{this.props.movie.title}</p>

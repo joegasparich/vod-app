@@ -15,7 +15,7 @@
 			"\tpublic readonly state: IState = {};",
 			"",
 			"\tpublic render(): JSX.Element {",
-			"\t\treturn <div id=\"id\" css={Styles} />;",
+			"\t\treturn <div className=\"name\" css={Styles} />;",
 			"\t}",
 			"}",
 			"",

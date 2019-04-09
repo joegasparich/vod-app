@@ -12,6 +12,7 @@ enum ScrollPos {
 
 interface IProps {
 	movies: IMovie[];
+	handleOpenMovie: (movie: IMovie) => void;
 }
 interface IState {
 	index: number;
@@ -31,6 +32,7 @@ const Styles = css`
 		height: 100%;
 		width: 5%;
 		top: 0;
+		z-index: 3;
 
 		display: flex;
 		justify-content: center;
@@ -67,6 +69,7 @@ class Carousel extends React.Component<IProps, IState> {
 				movie={movie}
 				focused={this.state.index === index}
 				handleSelect={this.handleSelect}
+				handleOpenMovie={this.props.handleOpenMovie}
 			/>
 		));
 
