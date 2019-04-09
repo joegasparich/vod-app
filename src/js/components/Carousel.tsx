@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import * as React from "react";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+
 import { IMovie } from "../types/MovieData";
 import MovieTile from "./MovieTile";
 
@@ -10,6 +12,7 @@ enum ScrollPos {
 	Right,
 }
 
+/* Component Interface */
 interface IProps {
 	movies: IMovie[];
 	handleOpenMovie: (movie: IMovie) => void;
@@ -19,6 +22,7 @@ interface IState {
 	scrollPos: ScrollPos;
 }
 
+/* Component Styles */
 const Styles = css`
 	position: relative;
 
@@ -26,6 +30,11 @@ const Styles = css`
 		display: flex;
 		flex-flow: row nowrap;
 		overflow-x: scroll;
+		@media (max-width: 750px) {
+			flex-flow: row wrap;
+			overflow-x: auto;
+			justify-content: center;
+		}
 	}
 	.scroll-button {
 		position: absolute;
@@ -49,6 +58,10 @@ const Styles = css`
 		&.right {
 			right: 0;
 		}
+
+		@media (max-width: 750px) {
+			display: none;
+		}
 	}
 `;
 
@@ -62,7 +75,9 @@ class Carousel extends React.Component<IProps, IState> {
 	// Refs
 	private contentRef: React.RefObject<HTMLDivElement> = React.createRef();
 
+	/* Lifecycle Methods */
 	public render(): JSX.Element {
+		// Generate movie list HTML
 		const movieList = this.props.movies.map((movie: IMovie, index: number) => (
 			<MovieTile
 				key={movie.id}
@@ -73,25 +88,34 @@ class Carousel extends React.Component<IProps, IState> {
 			/>
 		));
 
+		// Is carousel wide enough to have scroll buttons
+		const scrollX: boolean =
+			!!this.contentRef.current && this.contentRef.current.scrollWidth > this.contentRef.current.clientWidth;
+
 		return (
 			<div className="carousel" css={Styles} tabIndex={0} onKeyDown={this.handleKeyDown}>
-				{this.state.scrollPos !== ScrollPos.Left && (
+				{scrollX && this.state.scrollPos !== ScrollPos.Left && (
 					<div className="scroll-button left" onMouseUp={this.handleScrollLeft}>
-						<p>{"<"}</p>
+						<p>
+							<MdChevronLeft />
+						</p>
 					</div>
 				)}
 				<div className="contents" ref={this.contentRef} onScroll={this.handleScroll}>
 					{movieList}
 				</div>
-				{this.state.scrollPos !== ScrollPos.Right && (
+				{scrollX && this.state.scrollPos !== ScrollPos.Right && (
 					<div className="scroll-button right" onMouseUp={this.handleScrollRight}>
-						<p>{">"}</p>
+						<p>
+							<MdChevronRight />
+						</p>
 					</div>
 				)}
 			</div>
 		);
 	}
 
+	// Arrow keys & Enter to select movie
 	private handleKeyDown = (event: React.KeyboardEvent) => {
 		switch (event.key) {
 			case "ArrowRight":
@@ -106,11 +130,16 @@ class Carousel extends React.Component<IProps, IState> {
 					this.setState({ index: this.state.index - 1 });
 				}
 				break;
+			case "Enter":
+				event.preventDefault();
+				this.props.handleOpenMovie(this.props.movies[this.state.index]);
+				break;
 			default:
 				break;
 		}
 	};
 
+	// Set selected index on being selected
 	private handleSelect = (event: React.SyntheticEvent<HTMLDivElement, Event>) => {
 		this.props.movies.map((movie: IMovie, index: number) => {
 			if (movie.id === event.currentTarget.id) {
@@ -122,6 +151,7 @@ class Carousel extends React.Component<IProps, IState> {
 		});
 	};
 
+	// Get scroll state when scrolling elements
 	private handleScroll = (event: React.UIEvent) => {
 		if (event.currentTarget.scrollLeft <= 0) {
 			this.setState({ scrollPos: ScrollPos.Left });
@@ -137,6 +167,7 @@ class Carousel extends React.Component<IProps, IState> {
 		}
 	};
 
+	// Scroll buttons
 	private handleScrollLeft = () => {
 		if (!this.contentRef.current) return;
 

@@ -5,12 +5,14 @@ import { MdClose } from "react-icons/md";
 
 import { IMovie } from "../types/MovieData";
 
+/* Component Interface */
 interface IProps {
 	movie: IMovie;
 	handleCloseMovie: () => void;
 }
 interface IState {}
 
+/* Component Styles */
 const Styles = css`
 	position: fixed;
 	top: 0;
@@ -48,8 +50,6 @@ const Styles = css`
 `;
 
 class MoviePlayer extends React.Component<IProps, IState> {
-	public readonly state: IState = {};
-
 	// Refs
 	private mainRef: React.RefObject<HTMLDivElement> = React.createRef();
 	private playerRef: React.RefObject<HTMLVideoElement> = React.createRef();

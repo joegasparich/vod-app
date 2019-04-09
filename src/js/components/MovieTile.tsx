@@ -3,6 +3,7 @@ import { css, jsx } from "@emotion/core";
 import * as React from "react";
 import { IMovie, IImage } from "../types/MovieData";
 
+/* Component Interface */
 interface IProps {
 	movie: IMovie;
 	focused: boolean;
@@ -11,11 +12,21 @@ interface IProps {
 }
 interface IState {}
 
+/* Component Styles */
 const Styles = css`
 	margin: 1rem;
 	min-width: 214px;
 	overflow: hidden;
 	cursor: pointer;
+
+	@media (max-width: 750px) {
+		min-width: 0;
+		width: 130px;
+
+		img {
+			width: 100%;
+		}
+	}
 
 	transition: 0.2s transform ease;
 	&:hover {
