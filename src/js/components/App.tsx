@@ -40,11 +40,12 @@ class App extends React.Component<IProps, IState> {
 	}
 
 	public render(): JSX.Element {
-		let watchedMovies: IMovie[] = [];
+		const watchedMovies: IMovie[] = [];
 		if (this.state.movieData && this.state.watchedData) {
-			const data: IWatchedData = this.state.watchedData; // Workaround because Typescript can't undefined check here
-			watchedMovies = this.state.movieData.entries.filter((m: IMovie) => {
-				return data.watchedMovies.find((w: IWatchedMovie) => m.id === w.movieID);
+			const data: IMovieData = this.state.movieData; // Workaround because Typescript can't undefined check here
+			this.state.watchedData.watchedMovies.forEach((w: IWatchedMovie) => {
+				const movie = data.entries.find((m: IMovie) => m.id === w.movieID);
+				if (movie) watchedMovies.push(movie);
 			});
 		}
 
@@ -78,8 +79,13 @@ class App extends React.Component<IProps, IState> {
 		watchedData = {
 			watchedMovies: this.state.watchedData ? this.state.watchedData.watchedMovies : [],
 		};
-		watchedData.watchedMovies.push({ movieID: movie.id, time: new Date() });
-		watchedData.watchedMovies.sort((a, b) => a.time - b.time);
+		const searchMovie = watchedData.watchedMovies.find((m: IWatchedMovie) => m.movieID === movie.id);
+		if (searchMovie) {
+			searchMovie.time = new Date();
+		} else {
+			watchedData.watchedMovies.push({ movieID: movie.id, time: new Date() });
+		}
+		watchedData.watchedMovies.sort((a: IWatchedMovie, b: IWatchedMovie) => b.time.getTime() - a.time.getTime());
 
 		this.setState({
 			openMovie: movie,
@@ -91,7 +97,6 @@ class App extends React.Component<IProps, IState> {
 
 	private handleCloseMovie = () => {
 		this.setState({ openMovie: undefined });
-		this.fetchWatchedData();
 	};
 
 	private fetchMovieData = () => {
@@ -104,9 +109,15 @@ class App extends React.Component<IProps, IState> {
 		const cookie = Cookie.get("watched");
 		if (!cookie) return;
 
+		console.log("beep");
+
 		// Try get cookie
 		try {
-			const data: IWatchedData = JSON.parse(cookie) as IWatchedData;
+			const data = JSON.parse(cookie);
+			data.watchedMovies = data.watchedMovies.map((movie: any) => {
+				movie.time = new Date(movie.time);
+				return movie;
+			});
 
 			this.setState({
 				watchedData: data,

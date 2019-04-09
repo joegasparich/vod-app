@@ -18,6 +18,7 @@ const Styles = css`
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.8);
+	z-index: 2;
 
 	display: flex;
 	align-content: center;

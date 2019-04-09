@@ -32,7 +32,7 @@ const Styles = css`
 		height: 100%;
 		width: 5%;
 		top: 0;
-		z-index: 3;
+		z-index: 1;
 
 		display: flex;
 		justify-content: center;
